@@ -46,7 +46,7 @@ resource "aws_spot_instance_request" "master_node" {
   spot_type              = "one-time"
   wait_for_fulfillment   = "true"
   key_name               = var.key_name
-  user_data = file("first-master-userdata.sh")
+  private_ip             = "12.0.1.10"
 
   security_groups = [aws_security_group.cluster_sg.id]
   subnet_id = aws_subnet.subnet.id
@@ -66,7 +66,7 @@ resource "aws_spot_instance_request" "additional_master_nodes" {
   spot_type              = "one-time"
   wait_for_fulfillment   = "true"
   key_name               = var.key_name
-  user_data = file("additional-masters.sh")
+  private_ip             = "12.0.1.1${count.index + 1}"
 
   security_groups = [aws_security_group.cluster_sg.id]
   subnet_id = aws_subnet.subnet.id
