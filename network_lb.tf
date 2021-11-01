@@ -9,6 +9,14 @@ resource "aws_lb" "rke2-lb" {
   }
 }
 
+locals {
+  ids = [
+    aws_spot_instance_request.master_node.spot_instance_id,
+    aws_spot_instance_request.additional_master_nodes[0],
+    aws_spot_instance_request.additional_master_nodes[1]
+  ]
+}
+
 resource "aws_lb_target_group_attachment" "master-6443" {
   target_group_arn = aws_lb_target_group.rke2-target-group-6443.arn
   target_id        = aws_spot_instance_request.master_node.spot_instance_id
