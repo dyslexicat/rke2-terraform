@@ -48,6 +48,11 @@ resource "aws_spot_instance_request" "master_node" {
   key_name               = var.key_name
   private_ip             = "12.0.1.10"
 
+  root_block_device {
+      volume_type = "gp2"
+      volume_size = 16
+  }
+
   security_groups = [aws_security_group.cluster_sg.id]
   subnet_id = aws_subnet.subnet.id
 }
@@ -67,6 +72,11 @@ resource "aws_spot_instance_request" "additional_master_nodes" {
   wait_for_fulfillment   = "true"
   key_name               = var.key_name
   private_ip             = "12.0.1.1${count.index + 1}"
+
+  root_block_device {
+      volume_type = "gp2"
+      volume_size = 16
+  }
 
   security_groups = [aws_security_group.cluster_sg.id]
   subnet_id = aws_subnet.subnet.id
