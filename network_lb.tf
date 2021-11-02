@@ -12,45 +12,12 @@ resource "aws_lb" "rke2-lb" {
 locals {
   ids = [
     aws_spot_instance_request.master_node.spot_instance_id,
-    aws_spot_instance_request.additional_master_nodes[0],
-    aws_spot_instance_request.additional_master_nodes[1]
+    aws_spot_instance_request.additional_master_nodes[0].spot_instance_id,
+    aws_spot_instance_request.additional_master_nodes[1].spot_instance_id
   ]
 }
 
-resource "aws_lb_target_group_attachment" "master-6443" {
-  target_group_arn = aws_lb_target_group.rke2-target-group-6443.arn
-  target_id        = aws_spot_instance_request.master_node.spot_instance_id
-  port             = 6443
-}
-
-resource "aws_lb_target_group_attachment" "master-9345" {
-  target_group_arn = aws_lb_target_group.rke2-target-group-9345.arn
-  target_id        = aws_spot_instance_request.master_node.spot_instance_id
-  port             = 9345
-}
-
-resource "aws_lb_target_group_attachment" "slave-6443" {
-  target_group_arn = aws_lb_target_group.rke2-target-group-6443.arn
-  target_id        = aws_spot_instance_request.additional_master_nodes[0].spot_instance_id
-  port             = 6443
-}
-
-resource "aws_lb_target_group_attachment" "slave-9345" {
-  target_group_arn = aws_lb_target_group.rke2-target-group-9345.arn
-  target_id        = aws_spot_instance_request.additional_master_nodes[0].spot_instance_id
-  port             = 9345
-}
-
-resource "aws_lb_target_group_attachment" "slave-1-6443" {
-  target_group_arn = aws_lb_target_group.rke2-target-group-6443.arn
-  target_id        = aws_spot_instance_request.additional_master_nodes[1].spot_instance_id
-  port             = 6443
-}
-
-resource "aws_lb_target_group_attachment" "slave-1-9345" {
-  target_group_arn = aws_lb_target_group.rke2-target-group-9345.arn
-  target_id        = aws_spot_instance_request.additional_master_nodes[1].spot_instance_id
-  port             = 9345
+resource "aws_lb_target_group_attachment" "tg-attachment" {
 }
 
 resource "aws_lb_target_group" "rke2-target-group" {
