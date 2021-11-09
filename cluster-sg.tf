@@ -5,6 +5,7 @@ resource "aws_security_group" "cluster_sg" {
 
   tags = {
     Name = "k8s-cluster-sg"
+    "kubernetes.io/cluster/my-rke2-cluster" = "owned"
   }
 }
 

@@ -25,7 +25,7 @@ variable "instance_type" {
 variable "lb_ports" {
   type = map(number)
   default = {
-    rke2-6443 = 6443
-    rke2-9345 = 9345
+    6443 = 6443
+    9345 = 9345
   }
 }
