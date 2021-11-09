@@ -1,2 +1,7 @@
 [] - make open ports more specific
+<<<<<<< HEAD
 [x] - instead of userdata use ansible
+=======
+[] - instead of userdata use ansible
+[] - attach more storage
+>>>>>>> main
