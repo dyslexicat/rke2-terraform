@@ -64,7 +64,7 @@ resource "aws_ec2_tag" "master_node" {
   count = 3
   resource_id = aws_spot_instance_request.master_nodes[count.index].spot_instance_id
   key         = "Name"
-  value       = "rke2-master"
+  value       = "rke2-master-${count.index + 1}"
 }
 
 resource "aws_ec2_tag" "master_node_rancher" {
@@ -74,29 +74,29 @@ resource "aws_ec2_tag" "master_node_rancher" {
   value       = "owned"
 }
 
-/* resource "aws_spot_instance_request" "worker_nodes" { */
-/*   count = 2 */
-/*   ami                    = var.ami_name */
-/*   spot_price             = "0.018" */
-/*   instance_type          = var.instance_type */
-/*   spot_type              = "one-time" */
-/*   wait_for_fulfillment   = "true" */
-/*   key_name               = var.key_name */
-/*   private_ip             = "12.0.2.1${count.index + 1}" */
-/*   iam_instance_profile    = aws_iam_instance_profile.rancher_profile.name */
+resource "aws_spot_instance_request" "worker_nodes" {
+  count = 2
+  ami                    = var.ami_name
+  spot_price             = "0.018"
+  instance_type          = var.instance_type
+  spot_type              = "one-time"
+  wait_for_fulfillment   = "true"
+  key_name               = var.key_name
+  private_ip             = "12.0.1.2${count.index}"
+  iam_instance_profile   = aws_iam_instance_profile.rancher_profile.name
 
-/*   root_block_device { */
-/*       volume_type = "gp2" */
-/*       volume_size = 16 */
-/*   } */
+  root_block_device {
+      volume_type = "gp2"
+      volume_size = 16
+  }
 
-/*   security_groups = [aws_security_group.cluster_sg.id] */
-/*   subnet_id = aws_subnet.subnet.id */
-/* } */
+  security_groups = [aws_security_group.cluster_sg.id]
+  subnet_id = aws_subnet.subnet.id
+}
 
-/* resource "aws_ec2_tag" "worker_nodes" { */
-/*   count = 2 */
-/*   resource_id = aws_spot_instance_request.worker_nodes[count.index].spot_instance_id */
-/*   key         = "Name" */
-/*   value       = "rke2-worker-${count.index + 1}" */
-/* } */
+resource "aws_ec2_tag" "worker_nodes" {
+  count = 2
+  resource_id = aws_spot_instance_request.worker_nodes[count.index].spot_instance_id
+  key         = "Name"
+  value       = "rke2-worker-${count.index + 1}"
+}

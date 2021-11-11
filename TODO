@@ -1,3 +1,5 @@
 [] - make open ports more specific
 [x] - instead of userdata use ansible
 [x] - attach more storage
+[x] - fix rke2-master tag
+[] - look at terraform provider code for ec2_spot_instance_request
