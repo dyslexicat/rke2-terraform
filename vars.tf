@@ -29,3 +29,15 @@ variable "lb_ports" {
     9345 = 9345
   }
 }
+
+variable "master_count" {
+  description = "Number of EC2 instances for master nodes"
+  type = number
+  default = 1
+}
+
+variable "worker_count" {
+  description = "Number of EC2 instances for worker nodes"
+  type = number
+  default = 3
+}

@@ -41,7 +41,7 @@ resource "aws_subnet" "subnet" {
 }
 
 resource "aws_spot_instance_request" "master_nodes" {
-  count = 3
+  count = var.master_count
   ami                    = var.ami_name
   spot_price             = "0.018"
   instance_type          = var.instance_type
@@ -61,21 +61,21 @@ resource "aws_spot_instance_request" "master_nodes" {
 }
 
 resource "aws_ec2_tag" "master_node" {
-  count = 3
+  count = var.master_count
   resource_id = aws_spot_instance_request.master_nodes[count.index].spot_instance_id
   key         = "Name"
   value       = "rke2-master-${count.index + 1}"
 }
 
 resource "aws_ec2_tag" "master_node_rancher" {
-  count = 3
+  count = var.master_count
   resource_id = aws_spot_instance_request.master_nodes[count.index].spot_instance_id
   key         = "kubernetes.io/cluster/my-rke2-cluster"
   value       = "owned"
 }
 
 resource "aws_spot_instance_request" "worker_nodes" {
-  count = 2
+  count = var.worker_count
   ami                    = var.ami_name
   spot_price             = "0.018"
   instance_type          = var.instance_type
@@ -95,7 +95,7 @@ resource "aws_spot_instance_request" "worker_nodes" {
 }
 
 resource "aws_ec2_tag" "worker_nodes" {
-  count = 2
+  count = var.worker_count
   resource_id = aws_spot_instance_request.worker_nodes[count.index].spot_instance_id
   key         = "Name"
   value       = "rke2-worker-${count.index + 1}"

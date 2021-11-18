@@ -10,14 +10,14 @@ resource "aws_lb" "rke2-lb" {
 }
 
 resource "aws_lb_target_group_attachment" "master-6443" {
-  count = 3
+  count = var.master_count
   target_group_arn = aws_lb_target_group.rke2-target-group[6443].arn
   target_id        = aws_spot_instance_request.master_nodes[count.index].spot_instance_id
   port             = 6443
 }
 
 resource "aws_lb_target_group_attachment" "master-9345" {
-  count = 3
+  count = var.master_count
   target_group_arn = aws_lb_target_group.rke2-target-group[9345].arn
   target_id        = aws_spot_instance_request.master_nodes[count.index].spot_instance_id
   port             = 9345
