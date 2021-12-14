@@ -10,4 +10,4 @@ This code creates a NLB in order to use the address as the keepalived address in
 This script is provided as an example if you want to use a jump machine to install ansible and run the ansible code there.
 
 ## TODO
-[] - Restrict the security group to only include necessary ports for RKE2
+[x] - Restrict the security group to only include necessary ports for RKE2
