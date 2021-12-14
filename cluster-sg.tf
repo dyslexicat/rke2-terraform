@@ -4,8 +4,7 @@ resource "aws_security_group" "cluster_sg" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "k8s-cluster-sg"
-    "kubernetes.io/cluster/my-rke2-cluster" = "owned"
+    Name = "k8s-sg"
   }
 }
 

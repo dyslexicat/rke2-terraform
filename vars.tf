@@ -22,14 +22,6 @@ variable "instance_type" {
   default = "t2.medium"
 }
 
-variable "lb_ports" {
-  type = map(number)
-  default = {
-    6443 = 6443
-    9345 = 9345
-  }
-}
-
 variable "master_count" {
   description = "Number of EC2 instances for master nodes"
   type = number
@@ -39,5 +31,5 @@ variable "master_count" {
 variable "worker_count" {
   description = "Number of EC2 instances for worker nodes"
   type = number
-  default = 3
+  default = 1
 }

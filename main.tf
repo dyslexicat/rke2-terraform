@@ -3,7 +3,7 @@ resource "aws_vpc" "main" {
   enable_dns_hostnames = true
 
   tags = {
-    Name = "rke2-vpc"
+    Name = "k8s-vpc"
   }
 }
 
@@ -11,7 +11,7 @@ resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "rke2-gw"
+    Name = "k8s-gw"
   }
 }
 
@@ -35,8 +35,7 @@ resource "aws_subnet" "subnet" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "rke2-subnet"
-    "kubernetes.io/cluster/my-rke2-cluster" = "owned"
+    Name = "k8s-subnet"
   }
 }
 
@@ -49,7 +48,6 @@ resource "aws_spot_instance_request" "master_nodes" {
   wait_for_fulfillment   = "true"
   key_name               = var.key_name
   private_ip             = "12.0.1.1${count.index}"
-  iam_instance_profile   = aws_iam_instance_profile.rancher_profile.name
 
   root_block_device {
       volume_type = "gp2"
@@ -67,13 +65,6 @@ resource "aws_ec2_tag" "master_node" {
   value       = "rke2-master-${count.index + 1}"
 }
 
-resource "aws_ec2_tag" "master_node_rancher" {
-  count = var.master_count
-  resource_id = aws_spot_instance_request.master_nodes[count.index].spot_instance_id
-  key         = "kubernetes.io/cluster/my-rke2-cluster"
-  value       = "owned"
-}
-
 resource "aws_spot_instance_request" "worker_nodes" {
   count = var.worker_count
   ami                    = var.ami_name
@@ -83,7 +74,6 @@ resource "aws_spot_instance_request" "worker_nodes" {
   wait_for_fulfillment   = "true"
   key_name               = var.key_name
   private_ip             = "12.0.1.2${count.index}"
-  iam_instance_profile   = aws_iam_instance_profile.rancher_profile.name
 
   root_block_device {
       volume_type = "gp2"
